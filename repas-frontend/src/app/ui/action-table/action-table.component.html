@@ -1,0 +1,75 @@
+<table class="table table-striped table-dark table-responsive">
+  <thead>
+  <tr>
+    <th>{{ 'asset' | translate }}</th>
+    <!--display this columns only when required -->
+    <th *ngIf=" compositeAction.actions[0].name != null ">{{ 'OC' | translate }}</th>
+    <th *ngIf=" compositeAction.actions[0].name != null ">{{ 'target State' | translate }}</th>
+    <th *ngIf=" compositeAction.actions[0].delta != null ">{{ 'delta' | translate }}</th>
+    <th *ngIf=" compositeAction.actions[0].delta != null ">{{ 'value' | translate }}</th>
+    <th
+      *ngIf=" compositeAction.actions[0].activeValue != null ">{{ 'active value' | translate }}</th>
+    <th
+      *ngIf=" compositeAction.actions[0].activeValue != null ">{{ 'reactive value' | translate }}</th>
+    <th
+      *ngIf=" compositeAction.actions[0].elementSetLinks != null "> {{ 'aConsoReelleFixe' | translate }}</th>
+    <th
+      *ngIf=" compositeAction.actions[0].elementSetLinks != null "> {{ 'deltaPdQdP' | translate }}</th>
+    <th
+      *ngIf=" compositeAction.actions[0].elementSetLinks != null "> {{ 'modifPimp' | translate }}</th>
+    <th
+      *ngIf=" compositeAction.actions[0].elementSetLinks != null "> {{ 'actif' | translate }}</th>
+    <th
+      *ngIf=" compositeAction.actions[0].elementSetLinks != null "> {{ 'reactif' | translate }}</th>
+    <th
+      *ngIf=" compositeAction.actions[0].elementSetLinks != null "> {{ 'useModeVarHypo' | translate }}</th>
+    <th
+      *ngIf=" compositeAction.actions[0].elementSetLinks != null "> {{ 'name' | translate }}</th>
+    <th
+      *ngIf=" compositeAction.actions[0].elementSetLinks != null "> {{ 'folder' | translate }}</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let elementaryAction of compositeAction.actions">
+    <td>{{elementaryAction.assetId}}</td>
+    <td *ngIf=" compositeAction.actions[0].name != null ">{{elementaryAction.name}}</td>
+    <td *ngIf=" compositeAction.actions[0].name != null ">{{ (elementaryAction.targetStateOpened ?
+      'opened' : 'closed') | translate}}
+    </td>
+
+    <td *ngIf=" compositeAction.actions[0].delta != null ">{{elementaryAction.delta}}</td>
+    <td *ngIf=" compositeAction.actions[0].delta != null ">{{elementaryAction.value}}</td>
+    <td *ngIf=" compositeAction.actions[0].activeValue != null ">
+      {{elementaryAction.activeValue}}
+    </td>
+    <td *ngIf=" compositeAction.actions[0].activeValue != null ">
+      {{elementaryAction.reactiveValue}}
+    </td>
+
+    <td *ngIf=" compositeAction.actions[0].elementSetLinks != null ">
+      {{elementaryAction.aConsoReelleFixe}}
+    </td>
+    <td *ngIf=" compositeAction.actions[0].elementSetLinks != null ">
+      {{elementaryAction.deltaPdQdP}}
+    </td>
+    <td *ngIf=" compositeAction.actions[0].elementSetLinks != null ">
+      {{elementaryAction.modifPimp}}
+    </td>
+    <td *ngIf=" compositeAction.actions[0].elementSetLinks != null ">
+      {{elementaryAction.actif}}
+    </td>
+    <td *ngIf=" compositeAction.actions[0].elementSetLinks != null ">
+      {{elementaryAction.reactif}}
+    </td>
+    <td *ngIf=" compositeAction.actions[0].elementSetLinks != null ">
+      {{elementaryAction.useModeVarHypo}}
+    </td>
+    <td
+      *ngIf=" compositeAction.actions[0].elementSetLinks != null "> {{elementaryAction.elementSetLinks[0].name}}
+    </td>
+    <td *ngIf=" compositeAction.actions[0].elementSetLinks != null ">
+      {{elementaryAction.elementSetLinks[0].folder}}
+    </td>
+  </tr>
+  </tbody>
+</table>

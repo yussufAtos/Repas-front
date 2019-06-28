@@ -1,0 +1,24 @@
+.example-tree-invisible {
+  display: none;
+}
+
+.example-tree ul,
+.example-tree li {
+  margin-top: 0;
+  margin-bottom: 0;
+  list-style-type: none;
+}
+
+mat-tree-node:first-child .firstIsInvisible {
+  visibility: hidden;
+  padding-top: 0px;
+}
+
+.orElement {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+mat-tree-node {
+  min-height: 10px;
+}

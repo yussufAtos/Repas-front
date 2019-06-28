@@ -1,0 +1,26 @@
+<mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+
+  <!-- This is the tree node template for leaf nodes -->
+  <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+    <!-- use a disabled button to provide padding for tree leaf -->
+    <div *ngIf="node.level == 0" class="orElement firstIsInvisible">{{'OR' | translate}}</div>
+    <button style="background-color: #A8A8A8; width: 28px; height: 10px" mat-icon-button disabled>
+    </button>
+    <div *ngIf="node.level == 0">{{'The1' | translate}}{{'element' | translate}} {{node.name}}</div>
+    <div *ngIf="node.level != 0" class="subContingency">{{node.name}}</div>
+  </mat-tree-node>
+
+  <!-- This is the tree node template for expandable nodes -->
+  <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding>
+
+    <div *ngIf="node.level == 0" class="firstIsInvisible orElement">{{'OR' | translate}}</div>
+    <button style="background-color: #A8A8A8 ; padding-top: 0px" mat-icon-button matTreeNodeToggle
+            [attr.aria-label]="'toggle ' + node.name">
+      <mat-icon class="mat-icon-rtl-mirror">
+        {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+      </mat-icon>
+      {{'The' | translate}} {{node.contingencies.length}} {{'followingElements' | translate}} :
+    </button>
+  </mat-tree-node>
+
+</mat-tree>

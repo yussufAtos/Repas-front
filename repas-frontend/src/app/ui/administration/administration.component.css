@@ -1,0 +1,6 @@
+.limitHeight {
+  /*to limit height*/
+  display: block;
+  max-height: 350px;
+  overflow-y: scroll;
+}

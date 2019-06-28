@@ -1,0 +1,8 @@
+.center-text {
+  text-align: center;
+}
+
+.highlight {
+  background: #98baf6 !important; /* green */
+  color: black !important;
+}

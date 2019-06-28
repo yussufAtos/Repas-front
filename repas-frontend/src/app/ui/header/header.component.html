@@ -1,0 +1,35 @@
+<nav class="navbar nav-wrapper navbar-dark bg-dark mb-3">
+  <a class="navbar-brand" skipLocationChange routerLink="">RePAS</a>
+  <div class="navbar-expand mr-auto">
+    <div class="">
+      <ul class="nav navbar-nav">
+        <li [routerLinkActive]="['active']"><a class="nav-item nav-link" skipLocationChange routerLink="/home">{{ 'Home' | translate }}</a></li>
+        <li [routerLinkActive]="['active']"><a class="nav-item nav-link" skipLocationChange routerLink="/statistics">{{ 'Statistics' | translate }}</a></li>
+        <li [routerLinkActive]="['active']"><a class="nav-item nav-link" skipLocationChange routerLink="/automata">{{ 'Automata' | translate }}</a></li>
+        <li [routerLinkActive]="['active']"><a class="nav-item nav-link" skipLocationChange routerLink="/about">{{ 'About' | translate }}</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="navbar-expand ml-auto navbar-nav">
+    <div class="navbar-nav">
+      <div [routerLinkActive]="['active']"><a class="nav-item nav-link" skipLocationChange routerLink="/administration" *ngIf="itHasAdminOrAdvancedRole()" style="margin-top: 5px">{{ 'Administration' | translate }}</a></div>
+      <div class="nav-item dropdown" ngbDropdown>
+        <a style="margin-top: 5px" href="javascript:void(0)" class="nav-link" ngbDropdownToggle>
+          <i class="fa fa-language"></i> {{ 'Language' | translate }} <b class="caret"></b>
+        </a>
+        <div class="dropdown-menu-right" ngbDropdownMenu>
+          <a class="dropdown-item" href="javascript:void(0)" (click)="switchLanguage('en')">
+            {{ 'English' | translate }}
+          </a>
+          <a class="dropdown-item" href="javascript:void(0)" (click)="switchLanguage('fr')">
+            {{ 'French' | translate }}
+          </a>
+        </div>
+      </div>
+      <button class="btn btn-dark" style="margin-right: 50px" (click)="logout()">{{ 'Logout' | translate }}</button>
+      <img src="assets/logoRepas.png" alt="logo" height="50" width="42"/>
+    </div>
+  </div>
+</nav>
+
+

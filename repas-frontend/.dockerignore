@@ -1,0 +1,8 @@
+# On exclut tout du contexte
+**
+
+# Sauf l'application, la configuration du proxy et ce qui concerne docker
+!dist
+!proxy.conf
+!docker/Dockerfile
+

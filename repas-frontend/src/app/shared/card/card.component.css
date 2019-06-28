@@ -1,0 +1,11 @@
+.card-header-right {
+    z-index: 999;
+}
+
+.card-header {
+  max-height: 40px;
+}
+
+.card-body {
+  padding: .75rem;
+}

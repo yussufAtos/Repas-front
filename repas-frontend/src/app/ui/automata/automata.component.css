@@ -1,0 +1,45 @@
+.center-text {
+  text-align: center;
+}
+
+.highlight {
+  background: #98baf6 !important; /* green */
+  color: black !important;
+}
+
+::ng-deep .nav-fill .nav-link.active {
+  margin-top: -1px;
+  border-top: 2px solid #20a8d8;
+  color: yellow;
+}
+
+::ng-deep a {
+  color: #212529;
+}
+
+::ng-deep a:hover {
+  color: #20a8d8;
+}
+
+::ng-deep .nav-pills a.nav-link.active,
+::ng-deep .nav-pills .show > a.nav-link {
+  color: #fff;
+  background-color: #212529;
+}
+
+::ng-deep .nav-pills {
+  padding-left: 40px;
+}
+
+.my-custom-scrollbar {
+  position: relative;
+  height: 400px;
+  overflow: auto;
+}
+.table-wrapper-scroll-y {
+  display: block;
+}
+
+.detailTable th {
+  padding-right: 10px;
+}

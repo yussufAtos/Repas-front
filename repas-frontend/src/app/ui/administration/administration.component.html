@@ -1,0 +1,64 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-4">
+      <div style="margin-right: 10px; margin-left: 10px">
+        <app-card [title]=" 'Import logic xml_file' | translate ">
+          <h6>{{ 'Choose_file' | translate }}</h6>
+          <div>
+            <form (ngSubmit)="onSubmit()">
+              <div class="form-group">
+                <input type="file" (change)="fileProgress($event.target.files)"/>
+              </div>
+              <div class="form-group">
+                <button class="btn btn-dark" style="margin-right: 20px"
+                        [disabled]="loading">{{ 'Submit' | translate }}</button>
+                <img *ngIf="loading" style="max-height: 35px; max-width: 35px;"
+                     src="assets/spinner.gif" alt="Loading..."/>
+              </div>
+            </form>
+          </div>
+          <div *ngIf="isCreatedLogic()">
+            <app-card [title]="'Logic_Imported' | translate " [ngClass]="'limitHeight'">
+              <div style="background-color: #67F28A">
+                <ul *ngFor="let logicCreated of this.mapLogic.created">
+                  <li>{{logicCreated.shortDescription}} ({{logicCreated.id}})</li>
+                </ul>
+              </div>
+            </app-card>
+            <br/>
+          </div>
+          <div *ngIf="isExistsAlready()">
+            <app-card [title]="'Logic_already_exists' | translate " [ngClass]="'limitHeight'">
+              <div style="background-color: #FE8202">
+                <ul *ngFor="let logicCreated of this.mapLogic.already_exists">
+                  <li>{{logicCreated.shortDescription}} ({{logicCreated.id}})</li>
+                </ul>
+              </div>
+            </app-card>
+            <br/>
+          </div>
+          <div *ngIf="exception != null && !imported">
+            <app-card [title]="'Error' | translate ">
+              <div style="background-color: #FE6D6D">
+                <ul>
+                  <li>Message : {{exception.message | translate }}</li>
+                  <li>Cause : {{exception.cause}}</li>
+                </ul>
+              </div>
+            </app-card>
+            <br/>
+          </div>
+        </app-card>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div style="margin-right: 10px; margin-left: 10px">
+        <app-card [title]=" 'Generate_UUID' | translate ">
+          <button (click)="onClickGenerate()" class="btn btn-dark"
+                  style="margin-right: 10px">{{ 'Generate' | translate }}</button>
+          {{uuid}}
+        </app-card>
+      </div>
+    </div>
+  </div>
+</div>

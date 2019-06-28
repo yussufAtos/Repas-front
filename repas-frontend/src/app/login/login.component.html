@@ -1,0 +1,43 @@
+<!-- main app container -->
+<br/>
+<br/>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-4 offset-sm-3">
+      <img src="assets/logoRepas.png" style="display: block; margin: 0 auto;"/>
+      <br/>
+      <h2>Authentification</h2>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="username">Nom d'utilisateur</label>
+          <input type="text" formControlName="username" class="form-control" [value]="username"
+                 [ngClass]="{ 'is-invalid': submitted && f.username.errors }"/>
+          <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+            <div *ngIf="f.username.errors.required">Username is required</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="password">Mot de passe</label>
+          <input type="password" formControlName="password" class="form-control" [value]="password"
+                 [ngClass]="{ 'is-invalid': submitted && f.password.errors }"/>
+          <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+            <div *ngIf="f.password.errors.required">Password is required</div>
+          </div>
+        </div>
+        <div *ngIf="erreur" style="display: block">
+          <label style="color: darkred;"> Vous ne pouvez pas vous connecter </label>
+        </div>
+        <div class="form-group">
+          <button [disabled]="loading" class="btn btn-dark" style="margin-right: 50px; float: top"
+                  (keydown.enter)="onSubmit()">Connexion
+          </button>
+          <img *ngIf="loading" style="background-color: #A8A8A8; max-height: 40px; max-width: 40px;"
+               src="assets/spinner.gif"/>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!--<p>-->
+<!--login works!-->
+<!--</p>-->

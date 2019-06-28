@@ -1,0 +1,225 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-6">
+      <div style="margin-right: 10px; margin-left: 10px">
+        <app-card [title]=" 'Logic list' | translate ">
+          <div class="dt-responsive">
+            <div class="row">
+              <div class="col-xs-12 col-sm-12 col-sm-12 col-md-6">
+              </div>
+              <div class="col-xs-12 col-sm-12 col-md-12">
+                <div style="text-align: right;">
+                  <label>
+                    <input [(ngModel)]="stringSearch"
+                           class="input-sm full-data-search"
+                           placeholder="{{ 'Logic name' | translate }}" (keydown.enter)="search()">
+                    <button class="btn btn-dark" (click)="search()">{{ 'Search' | translate }}</button>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="panel-heading">User information</div>-->
+            <div class="table-striped table-dark">
+              <table mat-table #table [dataSource]="dataSource" matSort id="mat-elevation-z8">
+                <!-- Position Column -->
+                <ng-container matColumnDef="short_desc">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 20%"> {{ 'Logic' | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let logic">{{logic.shortDescription}}</td>
+                </ng-container>
+                <ng-container matColumnDef="date_mod">
+                  <th class="center-text" mat-header-cell *matHeaderCellDef
+                      style="width: 20%"> {{ 'ModificationDate' | translate }}</th>
+                  <td class="center-text" mat-cell *matCellDef="let logic" placement="top" container="body"
+                      [ngbTooltip]="displayDateTooltip(logic) | date: 'EEEE, MMMM d, y, h:mm:ss a zzzz'">{{logic.modificationDate | date: 'dd-MM-yyyy'}}</td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                    [ngClass]="{'highlight': selectedRowIndex == row.id}"
+                    (click)="selectRow(row)"></tr>
+              </table>
+              <nav class="navbar navbar-dark bg-dark">
+                <ul class="pagination text-center">
+                  <li class="page-item">
+                    <button class="btn" (click)="previousClicked()">{{ 'Previous' | translate }}</button>
+                  </li>
+                  <a style="padding: 10px"> {{pageIndicator}} </a>
+                  <li class="page-item">
+                    <button class="btn" (click)="nextClicked()">{{ 'Next' | translate }}</button>
+                  </li>
+                  <li class="page-item" style="padding-left: 20px">
+                    <select class="browser-default custom-select" (change)="onChangeOption($event.target.value)"
+                            [(ngModel)]="pageSize">
+                      <option *ngFor="let size of allSize" selected [value]="size"> {{size}} </option>
+                    </select>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </app-card>
+      </div>
+    </div>
+    <div class="col-sm-6" [ngClass]=" clicked ? 'limitHeight' : ''">
+      <div style="margin-right: 10px; margin-left: 10px">
+        <app-card [title]=" 'description' | translate ">
+          <mat-accordion>
+            <mat-expansion-panel [expanded]="panelOpenStateDescription" [hideToggle]="true" id="cardListDescription"
+                                 (opened)=" panelOpenStateDescription=true"
+                                 (closed)="panelOpenStateDescription = false">
+              <mat-expansion-panel-header>
+                <span class="mat-expansion-indicator indicator-description" (click)="toggleDescription()"></span>
+                <mat-panel-title>
+                  {{'description' | translate }}
+                </mat-panel-title>
+                <mat-panel-description>
+                  <!--Currently I am {{panelOpenStateDescription? 'open' : 'closed'}}-->
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <div *ngIf="clicked">
+                <a>{{row.description}}</a>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </app-card>
+        <br/>
+
+        <app-card [title]=" 'Defaults' | translate ">
+          <mat-accordion>
+            <mat-expansion-panel [expanded]="panelOpenStateContingency" [hideToggle]="true" id="cardListContingency"
+                                 (opened)=" panelOpenStateContingency=true"
+                                 (closed)="panelOpenStateContingency = false">
+              <mat-expansion-panel-header>
+                <span class="mat-expansion-indicator indicator-contingency" (click)="toggleContingency()"></span>
+                <mat-panel-title>
+                  {{'Contingencies' | translate }}
+                </mat-panel-title>
+                <mat-panel-description>
+                  <!--Currently I am {{panelOpenStateContingency ? 'open' : 'closed'}}-->
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <div *ngIf="clicked">
+                <a *ngIf="row.contingencies.length == 0" class="noData">{{'No default found' | translate }}</a>
+                <a *ngIf="row.contingencies.length != 0">
+                  {{'This logic will be applicable in case of contingnecy on:' | translate }}
+                  <app-contingency-tree [contingencies]="contingenciesSelected"></app-contingency-tree>
+                </a>
+              </div>
+            </mat-expansion-panel>
+
+          </mat-accordion>
+        </app-card>
+        <br/>
+
+        <app-card [title]=" 'Activation Rule' | translate">
+          <mat-accordion>
+            <mat-expansion-panel [expanded]="panelOpenStateContext" [hideToggle]="true" id="cardListConstraint"
+                                 [ngClass]=" panelOpenStateContext ? 'limitHeightIn' : ''"
+                                 (opened)="panelOpenStateContext = true"
+                                 (closed)="panelOpenStateContext = false">
+              <mat-expansion-panel-header>
+                <span class="mat-expansion-indicator indicator-constraint" (click)="toggleConstraint()"></span>
+                <mat-panel-title>
+                  {{'Constraints' | translate}}
+                </mat-panel-title>
+                <mat-panel-description>
+                  <!--Currently I am {{panelOpenStateContext ? 'open' : 'closed'}}-->
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+
+              <div *ngIf="clicked">
+                <div *ngFor="let rule of this.row.rulesList">
+                  <div *ngIf="rule.context == null">
+                    <a class="noData">{{ 'No constraint found' | translate}}</a>
+                  </div>
+                  <div *ngIf="rule.context != null">
+                    <a>{{'This logic will be applicable if :' | translate }}</a>
+                    <a
+                      *ngFor="let abstractContextConditionOrList of rule.context.condition.abstractContextConditionOrList">
+                      {{ abstractContextConditionOrList == rule.context.condition.abstractContextConditionOrList[0] ? ''
+                      : 'OR' | translate }}
+                      <br/>
+                      <ul>
+                        {{ abstractContextConditionOrList.atLeast ? ('- at least one constraint of the request is among:' |
+                        translate) : ('- all the constraints of the request are among:' | translate) }}
+                        <table class="table table-striped table-dark table-responsive ">
+                          <tr>
+                            <th>{{ 'asset' | translate }}</th>
+                            <th>{{ 'type' | translate }}</th>
+                          </tr>
+                          <tr
+                            *ngFor="let elementaryCondition of abstractContextConditionOrList.abstractContextConditionElementaryList">
+                            <td>{{elementaryCondition.assetId}}</td>
+                            <td>{{elementaryCondition.assetType}}</td>
+                          </tr>
+                        </table>
+                      </ul>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+          <div *ngIf="clicked && this.row.rulesList[0].curativeAction != null">
+            <br/>
+            <mat-accordion>
+              <mat-expansion-panel [expanded]="panelOpenStateActionCurative" [hideToggle]="true"
+                                   id="cardListActionCurative"
+                                   [ngClass]=" panelOpenStateActionCurative ? 'limitHeightIn' : ''"
+                                   (opened)="panelOpenStateActionCurative = true"
+                                   (closed)="panelOpenStateActionCurative = false">
+                <mat-expansion-panel-header>
+                  <span class="mat-expansion-indicator indicator-action" (click)="toggleActionCurative()"></span>
+                  <mat-panel-title>
+                    {{ 'Curative Actions' | translate }}
+                  </mat-panel-title>
+                  <mat-panel-description>
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+                <div *ngFor="let rule of this.row.rulesList">
+                  <a *ngFor="let compositeAction of rule.curativeAction.actions">
+                    {{ compositeAction == rule.curativeAction.actions[0] ? '' : 'AND' | translate }}
+                    <br/>
+                    <ul>
+                      {{ rule.curativeAction.actions[0].actions[0].actionType | translate}}
+                      <app-action-table [compositeAction]="compositeAction"></app-action-table>
+                    </ul>
+                  </a>
+                </div>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+          <div *ngIf="clicked && this.row.rulesList[0].preventiveAction != null">
+            <br/>
+            <mat-accordion>
+              <mat-expansion-panel [expanded]="panelOpenStateActionPrevenitve" [hideToggle]="true"
+                                   id="cardListActionPreventive"
+                                   [ngClass]=" panelOpenStateActionPrevenitve ? 'limitHeightIn' : ''"
+                                   (opened)="panelOpenStateActionPrevenitve = true"
+                                   (closed)="panelOpenStateActionPrevenitve = false">
+                <mat-expansion-panel-header>
+                  <span class="mat-expansion-indicator indicator-action" (click)="toggleActionPreventive()"></span>
+                  <mat-panel-title>
+                    {{ 'Preventive Actions' | translate }}
+                  </mat-panel-title>
+                  <mat-panel-description>
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+                <div *ngFor="let rule of this.row.rulesList">
+                  <a *ngFor="let compositeAction of rule.preventiveAction.actions">
+                    {{ compositeAction == rule.preventiveAction.actions[0] ? '' : 'AND' | translate }}
+                    <br/>
+                    <ul>
+                      {{ rule.preventiveAction.actions[0].actions[0].actionType | translate}}
+                      <app-action-table [compositeAction]="compositeAction"></app-action-table>
+                    </ul>
+                  </a>
+                </div>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+        </app-card>
+      </div>
+    </div>
+  </div>
+</div>

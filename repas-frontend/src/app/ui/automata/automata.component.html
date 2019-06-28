@@ -1,0 +1,237 @@
+<div>
+  <ngb-tabset #tabs type="pills">
+    <ngb-tab id="list">
+      <ng-template ngbTabTitle>{{ 'automata.List' | translate }}</ng-template>
+      <ng-template ngbTabContent>
+        <br/>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-sm-12">
+              <div style="margin-right: 10px; margin-left: 10px">
+                <app-card [title]=" 'automata.Automata_list' | translate ">
+                  <div class="dt-responsive">
+                    <div class="row">
+                      <div class="col-xs-12 col-sm-12 col-sm-12 col-md-6">
+                      </div>
+                      <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div style="text-align: right;">
+                          <label>
+                            <input [(ngModel)]="stringSearch"
+                                   class="input-sm full-data-search"
+                                   placeholder="{{ 'automata.Automata_name' | translate }}" (keydown.enter)="search()">
+                            <button class="btn btn-dark" (click)="search()">{{ 'Search' | translate }}</button>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="table-striped table-dark">
+                      <table mat-table #table [dataSource]="dataSource" matSort id="mat-elevation-z8">
+
+                        <!-- Position Column -->
+                        <ng-container matColumnDef="name">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header
+                              style="width: 10%"> {{ 'automata.Automata_name' | translate }}
+                          </th>
+                          <td mat-cell *matCellDef="let automaton">{{automaton.name}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="externalId">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header
+                              style="width: 10%"> {{ 'automata.external_id' | translate }}
+                          </th>
+                          <td mat-cell *matCellDef="let automaton">{{automaton.externalId}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="modelId">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header
+                              style="width: 10%"> {{ 'automata.model_id' | translate }}
+                          </th>
+                          <td mat-cell *matCellDef="let automaton">{{automaton.modelId}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="type">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header
+                              style="width: 10%"> {{ 'automata.type' | translate }}
+                          </th>
+                          <td mat-cell *matCellDef="let automaton">{{'automata.type_name.'+automaton.type | translate}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="beginningOfLife">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header
+                              style="width: 10%"> {{ 'automata.beginning_of_life' | translate }}
+                          </th>
+                          <td mat-cell *matCellDef="let automaton" container="body"
+                              [ngbTooltip]="automaton.beginningOfLife | date: 'EEEE, MMMM d, y, h:mm:ss a zzzz'">{{automaton.beginningOfLife  | date: 'dd-MM-yyyy'}}
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="endOfLife">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header
+                              style="width: 10%"> {{ 'automata.end_of_life' | translate }}
+                          </th>
+                          <td mat-cell *matCellDef="let automaton" container="body"
+                              [ngbTooltip]="automaton.endOfLife | date: 'EEEE, MMMM d, y, h:mm:ss a zzzz'">{{automaton.endOfLife | date: 'dd-MM-yyyy'}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="defaultEnabled">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header
+                              style="width: 10%"> {{ 'automata.default_enabled' | translate }}
+                          </th>
+                          <td mat-cell *matCellDef="let automaton">{{'boolean.'+automaton.defaultEnabled | translate}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="status">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header
+                              style="width: 10%"> {{ 'automata.status' | translate }}
+                          </th>
+                          <td mat-cell *matCellDef="let automaton">{{'automata.status_name.'+automaton.status | translate}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="enabled">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header
+                              style="width: 10%"> {{ 'automata.enabled' | translate }}
+                          </th>
+                          <td mat-cell *matCellDef="let automaton">{{'boolean.'+automaton.enabled | translate}}</td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                            [ngClass]="{'highlight': selectedRowIndex == row.id}"
+                            (click)="selectRowAutomaton(row)"></tr>
+                      </table>
+                      <nav class="navbar navbar-dark bg-dark">
+                        <ul class="pagination text-center">
+                          <li class="page-item">
+                            <button class="btn" (click)="previousClicked()">{{ 'Previous'  | translate }}</button>
+                          </li>
+                          <a style="padding: 10px"> {{pageIndicator}} </a>
+                          <li class="page-item">
+                            <button class="btn" (click)="nextClicked()">{{ 'Next'  | translate }}</button>
+                          </li>
+                          <li class="page-item" style="padding-left: 20px">
+                            <select class="browser-default custom-select" (change)="onChangeOption($event.target.value)"
+                                    [(ngModel)]="pageSize">
+                              <option *ngFor="let size of allSize" selected [value]="size"> {{size}} </option>
+                            </select>
+                          </li>
+                        </ul>
+                      </nav>
+                    </div>
+                  </div>
+                </app-card>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab id="details" [disabled]="disabled">
+      <ng-template ngbTabTitle>{{ 'automata.Details' | translate }}</ng-template>
+      <ng-template ngbTabContent>
+        <br/>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-sm-12">
+              <app-card [title]=" 'automata.Details' | translate ">
+                <div class="container-fluid">
+                  <div class="row">
+                    <table class="col-sm-12">
+                      <tr>
+                        <td><table class="detailTable">
+                          <tr><th> {{ 'automata.Automata_name' | translate }} : </th><td> {{this.automatonSelected.name}}</td></tr>
+                          <tr><th> {{ 'automata.type' | translate }} : </th><td> {{'automata.type_name.'+this.automatonSelected.type | translate}}</td></tr>
+                          <tr><th> {{ 'automata.model_id' | translate }} : </th><td> {{this.automatonSelected.modelId}}</td></tr>
+                        </table></td>
+                        <td><table class="detailTable">
+                          <tr><th> {{ 'automata.external_id' | translate }} : </th><td> {{this.automatonSelected.externalId}}</td></tr>
+                          <tr><th> {{ 'automata.default_enabled' | translate }} : </th><td> {{'boolean.'+this.automatonSelected.defaultEnabled | translate}}</td></tr>
+                          <tr><th> {{ 'automata.enabled' | translate }} : </th><td> {{'boolean.'+this.automatonSelected.enabled | translate}}</td></tr>
+                        </table></td>
+                        <td><table class="detailTable">
+                          <tr><th> {{ 'automata.status' | translate }} : </th><td> {{'automata.status_name.'+this.automatonSelected.status | translate}}</td></tr>
+                          <tr><th> {{ 'automata.beginning_of_life' | translate }} : </th>
+                            <td container="body"
+                                [ngbTooltip]="automatonSelected.beginningOfLife | date: 'EEEE, MMMM d, y, h:mm:ss a zzzz'">
+                              {{this.automatonSelected.beginningOfLife | date: 'dd-MM-yyyy'}}
+                            </td></tr>
+                          <tr><th> {{ 'automata.end_of_life' | translate }} : </th>
+                            <td container="body"
+                                [ngbTooltip]="automatonSelected.endOfLife  | date: 'EEEE, MMMM d, y, h:mm:ss a zzzz'">
+                              {{this.automatonSelected.endOfLife  | date: 'dd-MM-yyyy'}}
+                            </td></tr>
+
+                        </table></td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </app-card>
+            </div>
+            <div>
+              <br/>
+            </div>
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-sm-6">
+                  <app-card [title]=" 'automata.specific_parameter' | translate ">
+                    <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                      <table class="table table-striped table-dark table-responsive">
+                        <thead>
+                        <tr>
+                          <th>{{ 'automata.parameter' | translate }}</th>
+                          <th>{{ 'automata.value' | translate }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let parameter of this.parametersS ; let i = index;"
+                            (click)="selectRowParameter(parameter);">
+                          <td>{{parameter.key}}</td>
+                          <td>{{parameter.value}}</td>
+                        </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </app-card>
+                </div>
+                <div class="col-sm-6">
+                  <div class="container-fluid">
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <app-card [title]=" 'automata.comment' | translate ">
+                          <strong>
+                            {{ 'automata.exploitation_comment' | translate }} :
+                          </strong> <br/>
+                          {{this.automatonSelected.exploitationComment}}
+                          <br/>
+                          <br/>
+                          <strong>
+                            {{ 'automata.state_change_comment' | translate }} : <br/>
+                          </strong>
+                          {{this.automatonSelected.stateChangeComment}}
+                          <br/>
+                          <br/>
+                        </app-card>
+                      </div>
+                      <div>
+                        <br/>
+                      </div>
+                      <div class="col-sm-12">
+                        <app-card [title]=" 'automata.selected_parameter' | translate " *ngIf="this.parameterSelected != null">
+                            <strong>
+                              {{ this.parameterSelected.key }} :
+                            </strong> <br/>
+                            {{ this.parameterSelected.value }}
+                            <br/>
+                        </app-card>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+</div>
